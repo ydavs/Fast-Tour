@@ -1,0 +1,30 @@
+{
+    "manifest_version": 2, 
+    "name": "Optimize Route",
+    "version": "1.0",
+
+    "description": "Given a route on google maps, optimizes the total distance to move.", 
+    "icons":{
+        "48": "icons/moving_48.png",
+        "96": "icons/moving_96.png"
+    },
+    "permissions": [
+        "activeTab", 
+        "tabs"
+    ],
+    "browser_action": {
+        "default_icon": {
+            "19": "button/moving_19.png",
+            "38": "button/moving_38.png"
+        },
+        "default_title": "Optimize Route"
+    },
+    "background": {
+        "scripts": [
+            "background/parser.js",
+            "background/main.js"],
+        "persistent": false
+    },
+
+    "content_security_policy": "script-src 'self' https://maps.googleapis.com; object-src 'self' ;" 
+}
