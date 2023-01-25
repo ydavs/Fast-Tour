@@ -44,15 +44,23 @@ function distance_matrix_callback(response, status) {
     }
     else {
         console.log(response);    
-        let responseParser = new Response_parser(response);
-        // TODO: Optimize routes via TSP 
-        // TODO: Display optimized route  
+        // Parse reponse 
+        let responseParser = new Response_parser(response, locations);
+        console.log(responseParser.mappings)
+        
+        // Optimize routes via TSP
+        let bruteForceSolution = new BruteForceSolution(responseParser.distance_matrix); 
+        console.log("Tour distance before optimization ", bruteForceSolution.initial_tour_distance); 
+        bruteForceSolution.optimize(); 
+        console.log("Tour distance after optimization ", bruteForceSolution.best_tour_distance); 
+        locations = bruteForceSolution.get_locations(responseParser.mappings); 
+        
+        // Display optimized route  
+        display(locations); 
     }
 }
 
 function display(locations) {
-    locations.reverse(); 
-    console.log(locations); 
     let url = 'https://www.google.com/maps/dir';
 
     for(let i = 0; i < locations.length; i++) {
@@ -78,10 +86,11 @@ initiate_googleapi();
 
 //Get url on click 
 let url; 
+let locations; 
 browser.browserAction.onClicked.addListener((tab) =>{
     console.log("Got " + tab.url);
     url = tab.url; 
-    let locations = parse_url(url); 
+    locations = parse_url(url); 
     if(locations != -1) {
         get_distance_matrix(locations);  
     } 
