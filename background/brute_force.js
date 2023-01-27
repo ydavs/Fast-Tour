@@ -28,21 +28,26 @@ class BruteForceSolution {
 
     optimize() {
         this.current_permutation = new Array(); 
-        this.current_permutation.push(0); // Tour must begin and end at index 0   
+        this.current_permutation.push(0); // Tour must begin at index 0    
         
         this.chosen = new Array(this.size); // Bool array for brute iterating 
-        for(let i = 0; i < this.size; i++) {
+        for(let i = 0; i < this.size - 1; i++) {
             this.chosen[i] = false; 
         }
-        this.chosen[0] = true;  
+        
+        // Path must begin at index 0 and end at index n - 1.
+        this.chosen[0] = true;   
+        this.chosen[this.size - 1] = true; 
 
         this.choose_next_node(1);  
     }
 
     choose_next_node(current_size) {
-        if(current_size == this.size) {
-            console.assert(this.current_permutation.length == this.size); 
-            console.log(this.current_permutation.length, this.size); 
+        if(current_size == this.size - 1) {
+            // push last node to current permutation 
+            this.current_permutation.push(this.size - 1);
+            console.assert(this.current_permutation.length == this.size);  
+
             let tour_distance = 0; 
             for(let i = 0; i < this.size; i++) {
                 tour_distance += this.distance_matrix[this.current_permutation[i]][this.current_permutation[(i + 1) % this.size]];
@@ -52,16 +57,19 @@ class BruteForceSolution {
                 this.best_tour_distance = tour_distance; 
                 this.best_permutation = this.current_permutation.map((x) => x); 
             }
-
+            
+            // pop last index (n - 1^th) from the current permutation
+            this.current_permutation.pop(); 
             return; 
         }
 
-        for(let i = 0; i < this.size; i++) {
+        // choose one of the unchosen nodes 
+        for(let i = 0; i < this.size - 1; i++) {
             if(this.chosen[i]) continue; 
 
             this.chosen[i] = true; 
             this.current_permutation.push(i); 
-            this.choose_next_node(current_size + 1); 
+            this.choose_next_node(current_size + 1);
             this.chosen[i] = false;
             this.current_permutation.pop(); 
         }
