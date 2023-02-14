@@ -5,7 +5,7 @@ function googleapi_callback() {
 
 function initiate_googleapi() {
     var script = document.createElement('script'); 
-    script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDLLBNRKemkSReXKKKwfR4fCMYGF70XYAI&callback=googleapi_callback';
+    script.src = 'https://maps.googleapis.com/maps/api/js?key=**YOUR_API_KEY**&callback=googleapi_callback';
     script.async = true; 
 
     document.head.appendChild(script); 
